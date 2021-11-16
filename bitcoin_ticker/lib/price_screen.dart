@@ -62,7 +62,7 @@ class _PriceScreenState extends State<PriceScreen> {
         coinValues = data;
       });
     } catch (e) {
-      print(e);
+      return;
     }
   }
 

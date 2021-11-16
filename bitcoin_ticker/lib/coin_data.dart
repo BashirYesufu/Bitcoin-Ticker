@@ -53,7 +53,6 @@ class CoinData {
         cryptoPrices[crypto] = lastPrice.toStringAsFixed(0);
 
       } else {
-        print(response.statusCode);
         throw 'Error with get request!';
       }
     }
