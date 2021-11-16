@@ -54,12 +54,12 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 
-  String bitcoinValueInUSD = '?';
+  Map<String, String> coinValues = {};
   Future getData() async {
     try {
-      double data = await CoinData().getCoinData(currency: selectedCurrency);
+      var data = await CoinData().getCoinData(currency: selectedCurrency);
       setState(() {
-        bitcoinValueInUSD = data.toStringAsFixed(0);
+        coinValues = data;
       });
     } catch (e) {
       print(e);
@@ -79,30 +79,26 @@ class _PriceScreenState extends State<PriceScreen> {
         title: Text('🤑 Coin Ticker'),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
-            child: Card(
-              color: Colors.lightBlueAccent,
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-                child: Text(
-                  '1 BTC = $bitcoinValueInUSD $selectedCurrency',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
+          CryptoCard(
+            value: coinValues['BTC'] ?? '?',
+            selectedCurrency: selectedCurrency,
+            cryptoCurrency: cryptoList[0],
           ),
+
+          CryptoCard(
+            value: coinValues['ETH'] ?? '?',
+            selectedCurrency: selectedCurrency,
+            cryptoCurrency: cryptoList[1],
+          ),
+
+          CryptoCard(
+            value: coinValues['LTC'] ?? '?',
+            selectedCurrency: selectedCurrency,
+            cryptoCurrency: cryptoList[2],
+          ),
+          Spacer(),
           Container(
             height: 150.0,
             alignment: Alignment.center,
@@ -111,6 +107,46 @@ class _PriceScreenState extends State<PriceScreen> {
             child: Platform.isIOS ? iOSPicker() : androidDropDownButton(),
             ),
         ],
+      ),
+    );
+  }
+}
+
+
+
+class CryptoCard extends StatelessWidget {
+  const CryptoCard({
+    Key? key,
+    required this.value,
+    required this.selectedCurrency,
+    required this.cryptoCurrency,
+  }) : super(key: key);
+
+  final String value;
+  final String selectedCurrency;
+  final String cryptoCurrency;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
+      child: Card(
+        color: Colors.lightBlueAccent,
+        elevation: 5.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+          child: Text(
+            '1 $cryptoCurrency = $value $selectedCurrency',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
       ),
     );
   }

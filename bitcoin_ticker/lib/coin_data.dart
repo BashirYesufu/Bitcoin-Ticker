@@ -40,18 +40,25 @@ class CoinData {
 
   Future getCoinData({required String currency}) async {
 
-    String requestUrl = '$coinAPIURL/BTC/$currency?apikey=$apiKey';
-    http.Response response = await http.get(Uri.parse(requestUrl),);
+    Map<String, String> cryptoPrices = {};
+    for(String crypto in cryptoList) {
+      String requestUrl = '$coinAPIURL/$crypto/$currency?apikey=$apiKey';
+      http.Response response = await http.get(Uri.parse(requestUrl),);
 
-    if(response.statusCode == 200) {
-      String data = response.body;
+      if (response.statusCode == 200) {
+        String data = response.body;
 
-      var decodedData = jsonDecode(data);
-      var lastPrice = decodedData['rate'];
-      return lastPrice;
-    } else  {
-      print(response.statusCode);
-      throw 'Error with get request!';
+        var decodedData = jsonDecode(data);
+        var lastPrice = decodedData['rate'];
+        cryptoPrices[crypto] = lastPrice.toStringAsFixed(0);
+
+      } else {
+        print(response.statusCode);
+        throw 'Error with get request!';
+      }
     }
+    return cryptoPrices;
   }
+
+
 }
