@@ -22,7 +22,8 @@ const List<String> currenciesList = [
   'SEK',
   'SGD',
   'USD',
-  'ZAR'
+  'ZAR',
+  'NGN'
 ];
 
 const List<String> cryptoList = [
@@ -37,9 +38,9 @@ const apiKey = 'C1B63352-74DF-4CA7-8F11-874E63F91FE3';
 
 class CoinData {
 
-  Future getCoinData() async {
+  Future getCoinData({required String currency}) async {
 
-    String requestUrl = '$coinAPIURL/BTC/USD?apikey=$apiKey';
+    String requestUrl = '$coinAPIURL/BTC/$currency?apikey=$apiKey';
     http.Response response = await http.get(Uri.parse(requestUrl),);
 
     if(response.statusCode == 200) {
