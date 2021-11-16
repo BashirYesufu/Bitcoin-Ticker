@@ -1,6 +1,7 @@
 import 'package:bitcoin_ticker/coin_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 
 class PriceScreen extends StatefulWidget {
   const PriceScreen({Key? key}) : super(key: key);
@@ -52,6 +53,13 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 
+// Checking if the platform is iOS or android
+  Widget getPicker() {
+    if(Platform.isIOS) {
+      return iOSPicker();
+    }
+    return androidDropDownButton();
+}
 
 
   @override
@@ -90,7 +98,7 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            child: iOSPicker(),
+            child: getPicker(),
             ),
         ],
       ),
